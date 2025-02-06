@@ -5,14 +5,10 @@ function convertMsonToJsonSchema(content, options) {
     var mson = content.content[0];
     var schema = convert(mson, options);
     if (schema.type === 'array') {
-        var fixedType = false;
         if (mson.attributes && mson.attributes.typeAttributes) {
             fixedType = mson.attributes.typeAttributes.some(function (typeAttr) {
                 return typeAttr === 'fixedType';
             });
-        }
-        if (!fixedType) {
-            return { type: 'array', items: {} }; // reset items schema
         }
     }
     return schema;
@@ -60,7 +56,6 @@ function convert(mson, options) {
         if (member.meta && member.meta.description) {
             propertySchema.description = member.meta.description;
         }
-        var fixedType = false;
         if (member.attributes && member.attributes.typeAttributes) {
             member.attributes.typeAttributes.forEach(function (typeAttr) {
                 switch (typeAttr) {
@@ -79,9 +74,6 @@ function convert(mson, options) {
                         break;
                 }
             });
-        }
-        if (propertySchema.type === 'array' && !fixedType) {
-            propertySchema.items = {}; // reset item schema
         }
         schema.properties[member.content.key.content] = propertySchema;
     }

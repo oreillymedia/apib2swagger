@@ -300,7 +300,10 @@
           "properties": {
             "privileges": {
               "type": "array",
-              "items": {},
+              "items": {
+                "type": "string",
+                "example": "[\"add_users\"]"
+              },
               "description": "List of privileges the user has"
             }
           }

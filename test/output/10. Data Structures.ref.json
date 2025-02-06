@@ -154,7 +154,9 @@
     },
     "Coupons": {
       "type": "array",
-      "items": {}
+      "items": {
+        "$ref": "#/definitions/Coupon"
+      }
     },
     "Coupon Base": {
       "type": "object",

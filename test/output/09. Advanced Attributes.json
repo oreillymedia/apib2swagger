@@ -200,7 +200,9 @@
     },
     "Coupons": {
       "type": "array",
-      "items": {}
+      "items": {
+        "$ref": "#/definitions/Coupon"
+      }
     }
   },
   "securityDefinitions": {},
