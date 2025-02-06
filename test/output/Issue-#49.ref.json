@@ -57,7 +57,9 @@
             },
             "schema": {
               "type": "array",
-              "items": {}
+              "items": {
+                "$ref": "#/definitions/User"
+              }
             }
           },
           "500": {
