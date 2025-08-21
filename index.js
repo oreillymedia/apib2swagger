@@ -13,7 +13,7 @@ var apib2swagger = module.exports.convertParsed = function (apib, options) {
     const { openApi3, infoTitle } = options
     var output = {};
     if (openApi3) {
-        output.openapi = '3.0.3';
+        output.openapi = '3.1.0';
     } else {
         output.swagger = '2.0';
     }
@@ -145,23 +145,23 @@ var swaggerPaths = function (context, tag, resource) {
         var action = resource.actions[k];
         if (!action.attributes.uriTemplate) {
             if (!paths[pathName]) paths[pathName] = {};
-            paths[pathName][action.method.toLowerCase()] = swaggerOperation(context, pathParams, uriTemplate, action, tag);
+            paths[pathName][action.method.toLowerCase()] = swaggerOperation(context, pathParams, uriTemplate, action, tag, resource.name);
             continue;
         }
         var attrUriTemplate = UriTemplate.parse(action.attributes.uriTemplate),
             attrPathName = swaggerPathName(attrUriTemplate);
         if (!paths[attrPathName]) paths[attrPathName] = {};
-        paths[attrPathName][action.method.toLowerCase()] = swaggerOperation(context, [], attrUriTemplate, action, tag);
+        paths[attrPathName][action.method.toLowerCase()] = swaggerOperation(context, [], attrUriTemplate, action, tag, resource.name);
     }
 };
 
-var swaggerOperation = function (context, pathParams, uriTemplate, action, tag) {
+var swaggerOperation = function (context, pathParams, uriTemplate, action, tag, resourceName) {
     var operation = {
         'responses': processResponses(action.examples, context.options),
         'summary': action.name,
-        'operationId': action.name,
+        'operationId': `${resourceName}: ${action.name}`.trim(),
         'description': action.description,
-        'tags': tag ? [tag] : [],
+        'tags': [...(tag ? [tag] : []), resourceName],
         'parameters': pathParams.concat(processParameters(action.parameters, uriTemplate, context.options))
     };
     var produces = {}, producesExist = false;
